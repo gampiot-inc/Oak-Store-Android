@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - .github/workflows/da.yml
+      - .github/workflows/build.yml
       - oak_client/store/**
       - oak_client/build.gradle.kts
       - oak_client/gradle.properties
@@ -49,11 +49,11 @@ jobs:
       - name: Check google-services.json
         run: cat oak_client/store/google-services.json
 
-      - name: Create api_keys.xml
-        run: echo "$KEYS_FILE" > oak_client/store/src/main/res/values/api_keys.xml
+      - name: Create keys.xml
+        run: echo "$KEYS_FILE" > oak_client/store/src/main/res/values/keys.xml
 
-      - name: Check api_keys.xml
-        run: cat oak_client/store/src/main/res/values/api_keys.xml
+      - name: Check keys.xml
+        run: cat oak_client/store/src/main/res/values/keys.xml
 
       - name: Build with Gradle
         id: gradle_build_release
@@ -91,7 +91,19 @@ jobs:
             Type: release
             Commit message: `${{ github.event.head_commit.message }}`
             [Check the logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`
-
+            
+      - name: Sign APK
+        id: sign_apk_store
+        uses: noriban/sign-android-release@v5
+        with:
+          releaseDirectory: /
+          signingKeyBase64: ${{ secrets.KEYSTORE_FILE }}
+          alias: ${{ secrets.KEYSTORE_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: "34.0.0"
+            
       - name: Send APK to OakStore CI Telegram
         if: success()
         uses: appleboy/telegram-action@master
@@ -99,7 +111,7 @@ jobs:
           to: -1002213084840
           token: 7179036675:AAGD9GwhvcgMI7L6hU3hjjLyex_ctIZxI8s
           format: markdown
-          document: store-release-unsigned.apk
+          document: ${{steps.sign_apk_store.outputs.signedReleaseFile}}
           disable_web_page_preview: false
           message: |
             *Build Success!*
@@ -139,11 +151,11 @@ jobs:
       - name: Check google-services.json
         run: cat oak_console/console/google-services.json
 
-      - name: Create api_keys.xml
+      - name: Create keys.xml
         run: echo "$KEYS_FILE" > oak_console/console/src/main/res/values/keys.xml
 
-      - name: Check api_keys.xml
-        run: cat oak_console/console/src/main/res/values/api_keys.xml
+      - name: Check keys.xml
+        run: cat oak_console/console/src/main/res/values/keys.xml
 
       - name: Build with Gradle
         id: gradle_build_release
@@ -181,6 +193,18 @@ jobs:
             Type: release
             Commit message: `${{ github.event.head_commit.message }}`
             [Check the logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`
+            
+      - name: Sign APK
+        id: sign_apk_console
+        uses: noriban/sign-android-release@v5
+        with:
+          releaseDirectory: /
+          signingKeyBase64: ${{ secrets.KEYSTORE_FILE }}
+          alias: ${{ secrets.KEYSTORE_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: "34.0.0"         
 
       - name: Send APK to OakStore CI Telegram
         if: success()
@@ -189,7 +213,7 @@ jobs:
           to: -1002213084840
           token: 7179036675:AAGD9GwhvcgMI7L6hU3hjjLyex_ctIZxI8s
           format: markdown
-          document: console-release-unsigned.apk
+          document: ${{steps.sign_apk_console.outputs.signedReleaseFile}}
           disable_web_page_preview: false
           message: |
             *Build Success!*
