@@ -81,7 +81,7 @@ jobs:
         uses: appleboy/telegram-action@master
         with:
           to: -1002213084840
-          token: 7179036675:AAGD9GwhvcgMI7L6hU3hjjLyex_ctIZxI8s
+          token: ${{ secrets.TELEGRAM_TOKEN }}
           format: markdown
           disable_web_page_preview: false
           message: |
@@ -90,8 +90,8 @@ jobs:
             Branch: *${{ github.ref_name }}*
             Type: release
             Commit message: `${{ github.event.head_commit.message }}`
-            [Check the logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`
-            
+            [Check the logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
       - name: Sign APK
         id: sign_apk_store
         uses: noriban/sign-android-release@v5
@@ -109,7 +109,7 @@ jobs:
         uses: appleboy/telegram-action@master
         with:
           to: -1002213084840
-          token: 7179036675:AAGD9GwhvcgMI7L6hU3hjjLyex_ctIZxI8s
+          token: ${{ secrets.TELEGRAM_TOKEN }}
           format: markdown
           document: ${{steps.sign_apk_store.outputs.signedReleaseFile}}
           disable_web_page_preview: false
@@ -119,7 +119,7 @@ jobs:
             Branch: *${{ github.ref_name }}*
             Type: release
             Commit message: `${{ github.event.head_commit.message }}`
-            [Check the logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`
+            [Check the logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
   build_release_apk_console:
     name: Build Oak Console Release APK
@@ -183,7 +183,7 @@ jobs:
         uses: appleboy/telegram-action@master
         with:
           to: -1002213084840
-          token: 7179036675:AAGD9GwhvcgMI7L6hU3hjjLyex_ctIZxI8s
+          token: ${{ secrets.TELEGRAM_TOKEN }}
           format: markdown
           disable_web_page_preview: false
           message: |
@@ -192,8 +192,8 @@ jobs:
             Branch: *${{ github.ref_name }}*
             Type: release
             Commit message: `${{ github.event.head_commit.message }}`
-            [Check the logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`
-            
+            [Check the logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
       - name: Sign APK
         id: sign_apk_console
         uses: noriban/sign-android-release@v5
@@ -211,7 +211,7 @@ jobs:
         uses: appleboy/telegram-action@master
         with:
           to: -1002213084840
-          token: 7179036675:AAGD9GwhvcgMI7L6hU3hjjLyex_ctIZxI8s
+          token: ${{ secrets.TELEGRAM_TOKEN }}
           format: markdown
           document: ${{steps.sign_apk_console.outputs.signedReleaseFile}}
           disable_web_page_preview: false
@@ -221,4 +221,4 @@ jobs:
             Branch: *${{ github.ref_name }}*
             Type: release
             Commit message: `${{ github.event.head_commit.message }}`
-            [Check the logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`
+            [Check the logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
