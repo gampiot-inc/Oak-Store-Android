@@ -96,7 +96,7 @@ jobs:
         id: sign_apk_store
         uses: noriban/sign-android-release@v5
         with:
-          releaseDirectory: /
+          releaseDirectory: .
           signingKeyBase64: ${{ secrets.KEYSTORE_FILE }}
           alias: ${{ secrets.KEYSTORE_ALIAS }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -198,7 +198,7 @@ jobs:
         id: sign_apk_console
         uses: noriban/sign-android-release@v5
         with:
-          releaseDirectory: /
+          releaseDirectory: .
           signingKeyBase64: ${{ secrets.KEYSTORE_FILE }}
           alias: ${{ secrets.KEYSTORE_ALIAS }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
