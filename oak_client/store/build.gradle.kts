@@ -65,7 +65,7 @@ android {
 
 dependencies {
 
-    val kotlin_version = "2.0.0"
+    val kotlin_version = "2.0.10"
     val coroutines = "1.9.0-RC"
     
     // androidx
